@@ -4,7 +4,7 @@ var webpack = require('webpack')
 module.exports = {
   entry: {
     main: './src/main.js',
-    hoge: './src/hoge.js'
+    ajax: './src/ajax.js'
   },
   output: {
     path: path.resolve(__dirname, './dist'),

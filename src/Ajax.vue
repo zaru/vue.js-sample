@@ -1,23 +1,21 @@
 <template lang="pug">
-div#hoge
-  p hoge text
+div#ajax
   p {{ message }}
-  | plain text
-  ul(v-for="item in items")
-    li {{ item }}
+  ul
+    li(v-for="item in items") {{ item }}
 </template>
 
 <script>
 export default {
-  name: 'hoge',
+  name: 'ajax',
   data () {
     return {
-      message: 'hoge piyo',
+      message: 'Ajax sample code',
       items: []
     }
   },
   created () {
-    this.fetch_json("./hoge.json");
+    this.fetch_json("./ajax.json");
   },
   methods: {
     fetch_json(url) {
