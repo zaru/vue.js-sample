@@ -1,11 +1,16 @@
 var path = require('path')
 var webpack = require('webpack')
+var glob = require('glob')
+
+
+const base_path = path.resolve(__dirname, 'src/');
+const targets = glob.sync(`${base_path}/*.js`);
+
+const entries = {};
+targets.forEach((p) => entries[p.replace(/^.+\/([^\/]+?)\.js$/, '$1')] = p);
 
 module.exports = {
-  entry: {
-    main: './src/main.js',
-    ajax: './src/ajax.js'
-  },
+  entry: entries,
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
