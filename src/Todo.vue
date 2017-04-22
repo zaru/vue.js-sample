@@ -3,7 +3,8 @@ div#todo
   p
     input(type="text" v-model="task" v-on:keydown.enter="submit" autofocus)
   ul
-    li(v-for="item in items")
+    li(v-for="item in items" v-bind:class="{ completed: item.completed }")
+      input(type="checkbox" v-model="item.completed")
       |{{ item.title }}
       button(v-on:click="task_delete(item)") [x]
 </template>
@@ -17,15 +18,23 @@ export default {
       items: {}
     }
   },
+  watch: {
+    items: {
+      deep: true
+    }
+  },
   created () {
   },
   methods: {
     submit (e) {
       let uuid = this.uuid();
-      this.items[uuid] = {
-        id: uuid,
-        title: this.task
-      };
+      this.$set(this.items, uuid,
+        {
+          id: uuid,
+          title: this.task,
+          completed: false
+        }
+      );
       this.task = "";
     },
     task_delete (todo) {
@@ -47,4 +56,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.completed {
+  color: #aaaaaa;
+}
 </style>
