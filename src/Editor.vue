@@ -43,6 +43,8 @@ export default {
       guideStyle.top = data.top + 'px';
       guideStyle.left = data.left + 'px';
       document.body.appendChild(guide);
+
+      document.getElementById('editor-main').innerHTML = data.content;
     }
   },
   methods: {
@@ -80,7 +82,7 @@ export default {
 
       anchor.parentElement.removeChild(anchor);
 
-      this.$socket.emit("client_to_server", { top: position.top, left: position.left});
+      this.$socket.emit("client_to_server", { top: position.top, left: position.left, content: document.getElementById('editor-main').innerHTML});
     },
     set_guide (position) {
       let guide = document.getElementById('js-cursor-guide') || document.createElement('div');
