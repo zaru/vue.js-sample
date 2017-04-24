@@ -1,5 +1,9 @@
 <template lang="pug">
 div#editor
+    p run socket.io command `cd socket.io && node app`
+    p(v-if="isConnected") connected
+    button(@click="pingServer") ping
+
     div.menu
         button.btn-bold(v-on:click="bold") bold
         button.btn-bold(v-on:click="strike") strike
@@ -14,9 +18,38 @@ export default {
   name: 'editor',
   data () {
     return {
+      isConnected: false,
+      socketMessage: ''
+    }
+  },
+  sockets: {
+    connect(client) {
+      // Fired when the socket connects.
+      this.isConnected = true;
+      console.log("connected");
+    },
+
+    disconnect() {
+      this.isConnected = false;
+      console.log("dis-connected");
+    },
+
+    server_to_client (data) {
+      let guide = document.getElementById('js-other-cursor-' + data.user_id) || document.createElement('div');
+      guide.id = 'js-other-cursor-' + data.user_id;
+      guide.classList.add('other-cursor');
+      let guideStyle = guide.style;
+      guideStyle.position = 'absolute';
+      guideStyle.top = data.top + 'px';
+      guideStyle.left = data.left + 'px';
+      document.body.appendChild(guide);
     }
   },
   methods: {
+    pingServer() {
+      // Send the "pingServer" event to the server.
+      this.$socket.emit('pingServer', 'PING!')
+    },
     set_style (style) {
       document.execCommand(style, false, null);
     },
@@ -46,6 +79,8 @@ export default {
       this.set_information(position);
 
       anchor.parentElement.removeChild(anchor);
+
+      this.$socket.emit("client_to_server", { top: position.top, left: position.left});
     },
     set_guide (position) {
       let guide = document.getElementById('js-cursor-guide') || document.createElement('div');
@@ -96,5 +131,10 @@ export default {
         padding: 3px;
         opacity: 0.7;
         pointer-events: none;
+    }
+    .other-cursor {
+        width: 2px;
+        height: 20px;
+        background-color: #ff7733;
     }
 </style>

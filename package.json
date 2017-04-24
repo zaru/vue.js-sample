@@ -9,7 +9,10 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.2.1"
+    "socket-io": "file:socket.io",
+    "socket.io-client": "^1.7.3",
+    "vue": "^2.2.1",
+    "vue-socket.io": "^2.1.1-a"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
