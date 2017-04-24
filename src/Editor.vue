@@ -17,34 +17,19 @@ export default {
   },
   methods: {
     set_style (style) {
-      let sel = window.getSelection();
-      if(!sel.rangeCount) return;
-
-      let range = sel.getRangeAt(0);
-      let newNode = document.createElement('span');
-
-      newNode.setAttribute('style', style);
-
-      newNode.innerHTML = sel.toString();
-      range.deleteContents();
-      range.insertNode(newNode);
-
-      // debug code
-      let tmpDiv = document.createElement('div');
-      tmpDiv.appendChild(range.cloneContents());
-      console.log(tmpDiv.innerHTML);
+      document.execCommand(style, false, null);
     },
     bold () {
-      this.set_style('font-weight: bold;');
+      this.set_style('bold');
     },
     strike () {
-      this.set_style('text-decoration: line-through;');
+      this.set_style('strikeThrough');
     },
     underline () {
-      this.set_style('text-decoration: underline;');
+      this.set_style('underline');
     },
     italic () {
-      this.set_style('font-style: italic');
+      this.set_style('italic');
     }
   }
 }
