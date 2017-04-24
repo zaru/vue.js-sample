@@ -12,7 +12,8 @@ export default {
     return {
       items: [
         { url: "ajax.html", title: "Ajax" },
-        { url: "todo.html", title: "Todo" }
+        { url: "todo.html", title: "Todo" },
+        { url: "editor.html", title: "Editor" }
       ]
     }
   }
