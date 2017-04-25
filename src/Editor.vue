@@ -46,6 +46,13 @@ export default {
       this.set_other_caret(data);
       this.set_other_user(data);
       document.getElementById('editor-main').innerHTML = data.content;
+    },
+
+    remove_caret (data) {
+      let doms = document.querySelectorAll('[data-user-id="' + data.user_id + '"]');
+      doms.forEach( dom => {
+        dom.parentElement.removeChild(dom);
+      })
     }
   },
   methods: {
@@ -120,6 +127,7 @@ export default {
     set_other_caret (data) {
       let guide = document.getElementById('js-other-cursor-' + data.user_id) || document.createElement('div');
       guide.id = 'js-other-cursor-' + data.user_id;
+      guide.dataset.userId = data.user_id;
       guide.classList.add('other-cursor');
       let guideStyle = guide.style;
       guideStyle.position = 'absolute';
@@ -131,6 +139,7 @@ export default {
     set_other_user (data) {
       let guide = document.getElementById('js-other-user-' + data.user_id) || document.createElement('div');
       guide.id = 'js-other-user-' + data.user_id;
+      guide.dataset.userId = data.user_id;
       guide.classList.add('other-user');
       guide.innerText = data.user_id;
       let guideStyle = guide.style;
@@ -155,7 +164,7 @@ export default {
     #editor-main {
         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
         cursor: text;
-        width: 40%;
+        width: 600px;
         height: 500px;
         border: 1px solid #cccccc;
         padding: 10px;

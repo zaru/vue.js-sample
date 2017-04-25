@@ -10,7 +10,11 @@ io.on('connection', function(client){
   });
 
   client.on('event', function(data){});
-  client.on('disconnect', function(){});
+  client.on('disconnect', function(){
+    client.broadcast.emit('remove_caret', {
+      user_id: client.id
+    });
+  });
 
   client.on('sync_caret_and_content_to_server', function(data) {
 
