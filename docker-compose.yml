@@ -1,0 +1,20 @@
+version: '3'
+services:
+  kvs:
+    image: redis
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    tty: true
+  websocket:
+    build: ./socket.io
+    volumes:
+      - ./socket.io:/app
+    ports:
+      - "3000:3000"
+    tty: true
+    depends_on:
+      - kvs
