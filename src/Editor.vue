@@ -42,7 +42,7 @@ export default {
       document.getElementById('editor-main').innerHTML = content;
     },
 
-    server_to_client (data) {
+    sync_caret_and_content_to_client (data) {
       this.set_other_caret(data);
       this.set_other_user(data);
       document.getElementById('editor-main').innerHTML = data.content;
@@ -85,7 +85,7 @@ export default {
 
       anchor.parentElement.removeChild(anchor);
 
-      this.$socket.emit("client_to_server", {
+      this.$socket.emit("sync_caret_and_content_to_server", {
         top: position.top,
         left: position.left,
         content: document.getElementById('editor-main').innerHTML,

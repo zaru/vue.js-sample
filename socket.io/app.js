@@ -12,11 +12,11 @@ io.on('connection', function(client){
   client.on('event', function(data){});
   client.on('disconnect', function(){});
 
-  client.on('client_to_server', function(data) {
+  client.on('sync_caret_and_content_to_server', function(data) {
 
     redis.set('content', data.content);
 
-    client.broadcast.emit('server_to_client', {
+    client.broadcast.emit('sync_caret_and_content_to_client', {
       user_id: client.id,
       top: data.top,
       left: data.left,
