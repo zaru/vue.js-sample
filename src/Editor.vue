@@ -24,7 +24,6 @@ export default {
     }
   },
   mounted() {
-    console.log("created");
     document.getElementById('editor-main').focus();
   },
   sockets: {
@@ -37,6 +36,10 @@ export default {
     disconnect() {
       this.isConnected = false;
       console.log("dis-connected");
+    },
+
+    content (content) {
+      document.getElementById('editor-main').innerHTML = content;
     },
 
     server_to_client (data) {
