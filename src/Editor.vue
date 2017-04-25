@@ -35,15 +35,7 @@ export default {
     },
 
     server_to_client (data) {
-      let guide = document.getElementById('js-other-cursor-' + data.user_id) || document.createElement('div');
-      guide.id = 'js-other-cursor-' + data.user_id;
-      guide.classList.add('other-cursor');
-      let guideStyle = guide.style;
-      guideStyle.position = 'absolute';
-      guideStyle.top = data.top + 'px';
-      guideStyle.left = data.left + 'px';
-      document.body.appendChild(guide);
-
+      this.set_other_caret(data);
       document.getElementById('editor-main').innerHTML = data.content;
     }
   },
@@ -100,6 +92,16 @@ export default {
       informationStyle.top = position.top + 30 + 'px';
       informationStyle.left = position.left + 'px';
       document.body.appendChild(information);
+    },
+    set_other_caret (data) {
+      let guide = document.getElementById('js-other-cursor-' + data.user_id) || document.createElement('div');
+      guide.id = 'js-other-cursor-' + data.user_id;
+      guide.classList.add('other-cursor');
+      let guideStyle = guide.style;
+      guideStyle.position = 'absolute';
+      guideStyle.top = data.top + 'px';
+      guideStyle.left = data.left + 'px';
+      document.body.appendChild(guide);
     }
   }
 }
