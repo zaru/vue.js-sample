@@ -9,8 +9,7 @@ div#editor
         button.btn-bold(v-on:click="strike") strike
         button.btn-bold(v-on:click="underline") underline
         button.btn-bold(v-on:click="italic") italic
-    div#editor-main(contenteditable="true" v-on:mouseup="caret_update" v-on:keyup="caret_update")
-        |ダミーテキストです。
+    div#editor-main(contenteditable="true" v-on:mouseup="caret_update" v-on:keyup="caret_update" v-on:keyup.enter="convert_paragraph")
 </template>
 
 <script>
@@ -21,6 +20,10 @@ export default {
       isConnected: false,
       socketMessage: ''
     }
+  },
+  mounted() {
+    console.log("created");
+    document.getElementById('editor-main').focus();
   },
   sockets: {
     connect(client) {
@@ -58,6 +61,10 @@ export default {
     },
     italic () {
       this.set_style('italic');
+    },
+    convert_paragraph() {
+      console.log("enter");
+      document.execCommand('formatBlock', false, 'p');
     },
     caret_update () {
       let sel = window.getSelection();
@@ -117,6 +124,9 @@ export default {
         padding: 10px;
         line-height: 1.6;
         outline: 0;
+        p {
+            margin: 0px 0px 15px 0px;
+        }
     }
     #js-cursor-guide {
         position: absolute;
