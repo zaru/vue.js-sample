@@ -9,7 +9,8 @@ div#editor
         button.btn-bold(v-on:click="strike") strike
         button.btn-bold(v-on:click="underline") underline
         button.btn-bold(v-on:click="italic") italic
-    div#editor-main(contenteditable="true" v-on:mouseup="caret_update" v-on:keyup="caret_update" v-on:keyup.enter="convert_paragraph")
+    div#editor-content
+        div#editor-main(contenteditable="true" v-on:mouseup="caret_update" v-on:keyup="caret_update" v-on:keyup.enter="convert_paragraph")
 </template>
 
 <script>
@@ -74,7 +75,12 @@ export default {
       let anchor = document.createElement('span');
       range.insertNode(anchor);
 
-      let position = anchor.getBoundingClientRect();
+      let parent_position = document.getElementById('editor-main').getBoundingClientRect();
+      let caret_position = anchor.getBoundingClientRect();
+      let position = {
+        top: caret_position.top - parent_position.top,
+        left: caret_position.left - parent_position.left
+      };
 
       this.set_guide(position);
       this.set_information(position);
@@ -89,7 +95,7 @@ export default {
       let guideStyle = guide.style;
       guideStyle.width = position.left + 'px';
       guideStyle.height = position.top + 'px';
-      document.body.appendChild(guide);
+      document.getElementById('editor-content').appendChild(guide);
     },
     set_information (position) {
       let information = document.getElementById('js-cursor-information') || document.createElement('div');
@@ -98,7 +104,7 @@ export default {
       let informationStyle = information.style;
       informationStyle.top = position.top + 30 + 'px';
       informationStyle.left = position.left + 'px';
-      document.body.appendChild(information);
+      document.getElementById('editor-content').appendChild(information);
     },
     set_other_caret (data) {
       let guide = document.getElementById('js-other-cursor-' + data.user_id) || document.createElement('div');
@@ -108,13 +114,16 @@ export default {
       guideStyle.position = 'absolute';
       guideStyle.top = data.top + 'px';
       guideStyle.left = data.left + 'px';
-      document.body.appendChild(guide);
+      document.getElementById('editor-content').appendChild(guide);
     }
   }
 }
 </script>
 
 <style lang="scss">
+    #editor-content {
+        position: relative;
+    }
     #editor-main {
         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
         cursor: text;
