@@ -19,7 +19,8 @@ export default {
   data () {
     return {
       isConnected: false,
-      socketMessage: ''
+      socketMessage: '',
+      user_color: this.get_color()
     }
   },
   mounted() {
@@ -40,6 +41,7 @@ export default {
 
     server_to_client (data) {
       this.set_other_caret(data);
+      this.set_other_user(data);
       document.getElementById('editor-main').innerHTML = data.content;
     }
   },
@@ -64,7 +66,6 @@ export default {
       this.set_style('italic');
     },
     convert_paragraph() {
-      console.log("enter");
       document.execCommand('formatBlock', false, 'p');
     },
     caret_update () {
@@ -74,20 +75,27 @@ export default {
       // 座標を計測するためのダミー用のspanを入れる
       let anchor = document.createElement('span');
       range.insertNode(anchor);
-
-      let parent_position = document.getElementById('editor-main').getBoundingClientRect();
-      let caret_position = anchor.getBoundingClientRect();
-      let position = {
-        top: caret_position.top - parent_position.top,
-        left: caret_position.left - parent_position.left
-      };
+      let position = this.caret_position(anchor);
 
       this.set_guide(position);
       this.set_information(position);
 
       anchor.parentElement.removeChild(anchor);
 
-      this.$socket.emit("client_to_server", { top: position.top, left: position.left, content: document.getElementById('editor-main').innerHTML});
+      this.$socket.emit("client_to_server", {
+        top: position.top,
+        left: position.left,
+        content: document.getElementById('editor-main').innerHTML,
+        color: this.user_color
+      });
+    },
+    caret_position (anchor) {
+      let parent_position = document.getElementById('editor-main').getBoundingClientRect();
+      let caret_position = anchor.getBoundingClientRect();
+      return {
+        top: caret_position.top - parent_position.top,
+        left: caret_position.left - parent_position.left
+      };
     },
     set_guide (position) {
       let guide = document.getElementById('js-cursor-guide') || document.createElement('div');
@@ -114,7 +122,24 @@ export default {
       guideStyle.position = 'absolute';
       guideStyle.top = data.top + 'px';
       guideStyle.left = data.left + 'px';
+      guideStyle.backgroundColor = data.color;
       document.getElementById('editor-content').appendChild(guide);
+    },
+    set_other_user (data) {
+      let guide = document.getElementById('js-other-user-' + data.user_id) || document.createElement('div');
+      guide.id = 'js-other-user-' + data.user_id;
+      guide.classList.add('other-user');
+      guide.innerText = data.user_id;
+      let guideStyle = guide.style;
+      guideStyle.position = 'absolute';
+      guideStyle.top = data.top - 25 + 'px';
+      guideStyle.left = data.left + 'px';
+      guideStyle.backgroundColor = data.color;
+      document.getElementById('editor-content').appendChild(guide);
+    },
+    get_color () {
+      let colors = ['#14E1E3', '#C5FB25', '#FFAB00', '#FF065B', '#7C32FF', '#FF4C1E', '#FBE525', '#2797FF', '#28C93F'];
+      return colors[Math.floor(Math.random() * colors.length)];
     }
   }
 }
@@ -158,6 +183,11 @@ export default {
     .other-cursor {
         width: 2px;
         height: 20px;
-        background-color: #ff7733;
+    }
+    .other-user {
+        width: auto;
+        font-size: 10px;
+        color: #ffffff;
+        padding: 3px;
     }
 </style>

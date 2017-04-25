@@ -5,7 +5,13 @@ io.on('connection', function(client){
   client.on('disconnect', function(){});
 
   client.on('client_to_server', function(data) {
-    client.broadcast.emit('server_to_client', { user_id: client.id, top: data.top, left: data.left, content: data.content });
+    client.broadcast.emit('server_to_client', {
+      user_id: client.id,
+      top: data.top,
+      left: data.left,
+      content: data.content,
+      color: data.color
+    });
   });
 });
 server.listen(3000);
