@@ -13,7 +13,8 @@ export default {
       items: [
         { url: "ajax.html", title: "Ajax" },
         { url: "todo.html", title: "Todo" },
-        { url: "editor.html", title: "Editor" }
+        { url: "editor.html", title: "Editor" },
+        { url: "paper.html", title: "Paper" }
       ]
     }
   }
