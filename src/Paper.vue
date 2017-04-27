@@ -1,5 +1,8 @@
 <template lang="pug">
 div#paper
+    div.other-users
+        div.user(v-for="user in users" v-bind:style="{ backgroundColor: user.color }")
+            | {{ user.id[0].toUpperCase() }}
     div#editor-content
         div#toolbox(v-show="showToolbox")
             button.btn-bold(v-on:click="bold") b
@@ -22,7 +25,8 @@ export default {
       showToolbox: false,
       isConnected: false,
       socketMessage: '',
-      user_color: this.get_color()
+      user_color: this.get_color(),
+      users: []
     }
   },
   mounted() {
@@ -31,6 +35,10 @@ export default {
   sockets: {
     connect() {
       this.isConnected = true;
+
+      this.$socket.emit("sync_user_to_server", {
+        color: this.user_color
+      });
     },
 
     disconnect() {
@@ -52,6 +60,10 @@ export default {
       doms.forEach( dom => {
         dom.parentElement.removeChild(dom);
       })
+    },
+
+    sync_user_to_client (data) {
+      this.users.push({ id: data.user_id, color: data.color});
     }
   },
   methods: {
@@ -243,6 +255,21 @@ export default {
             &:hover {
                 color: #ffffff;
             }
+        }
+    }
+    .other-users {
+        text-align: right;
+        .user {
+            display: inline-block;
+            color: #ffffff;
+            padding: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            margin: 3px;
         }
     }
 </style>

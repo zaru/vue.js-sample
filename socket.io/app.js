@@ -16,6 +16,13 @@ io.on('connection', function(client){
     });
   });
 
+  client.on('sync_user_to_server', function(data) {
+    client.broadcast.emit('sync_user_to_client', {
+      user_id: client.id,
+      color: data.color
+    });
+  });
+
   client.on('sync_caret_and_content_to_server', function(data) {
 
     redis.set('content', data.content);
