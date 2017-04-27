@@ -1,16 +1,17 @@
 <template lang="pug">
-div#editor
-    p run socket.io command `cd socket.io && node app`
-    p(v-if="isConnected") connected
-    button(@click="pingServer") ping
-
-    div.menu
-        button.btn-bold(v-on:click="bold") bold
-        button.btn-bold(v-on:click="strike") strike
-        button.btn-bold(v-on:click="underline") underline
-        button.btn-bold(v-on:click="italic") italic
+div#paper
+    div.toolbox(v-show="showToolbox")
+        button.btn-bold(v-on:click="bold") b
+        button.btn-bold(v-on:click="strike") s
+        button.btn-bold(v-on:click="underline") u
+        button.btn-bold(v-on:click="italic") i
     div#editor-content
-        div#editor-main(contenteditable="true" v-on:mouseup="caret_update" v-on:keyup="caret_update" v-on:keyup.enter="convert_paragraph")
+        div#editor-main(contenteditable="true"
+            v-on:mouseup="caret_update"
+            v-on:keyup="caret_update"
+            v-on:keyup.enter="convert_paragraph"
+            v-on:selectstart="start_selection"
+            )
 </template>
 
 <script>
@@ -18,6 +19,7 @@ export default {
   name: 'editor',
   data () {
     return {
+      showToolbox: true,
       isConnected: false,
       socketMessage: '',
       user_color: this.get_color()
@@ -27,15 +29,12 @@ export default {
     document.getElementById('editor-main').focus();
   },
   sockets: {
-    connect(client) {
-      // Fired when the socket connects.
+    connect() {
       this.isConnected = true;
-      console.log("connected");
     },
 
     disconnect() {
       this.isConnected = false;
-      console.log("dis-connected");
     },
 
     content (content) {
@@ -56,6 +55,20 @@ export default {
     }
   },
   methods: {
+    start_selection () {
+      document.addEventListener('mouseup', this.show_toolbar, {
+        once: true
+      });
+    },
+    show_toolbar () {
+      this.showToolbox = true;
+      document.addEventListener('mouseup', this.hide_toolbox, {
+        once: true
+      });
+    },
+    hide_toolbox() {
+      this.showToolbox = false;
+    },
     pingServer() {
       // Send the "pingServer" event to the server.
       this.$socket.emit('pingServer', 'PING!')
@@ -160,17 +173,19 @@ export default {
 <style lang="scss">
     #editor-content {
         position: relative;
+        margin: 100px auto;
+        width: 745px;
     }
     #editor-main {
         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
         cursor: text;
-        width: 600px;
-        height: 500px;
-        border: 1px solid #cccccc;
+        background-color: #fafafa;
         padding: 10px;
         line-height: 1.6;
         outline: 0;
+        color: #1b2733;
         p {
+            font-size: 16px;
             margin: 0px 0px 15px 0px;
         }
     }
@@ -201,5 +216,24 @@ export default {
         font-size: 10px;
         color: #ffffff;
         padding: 3px;
+    }
+    .toolbox {
+        background-color: #1b2733;
+        box-shadow: 0 0 0 1px #000, 0 8px 16px rgba(27,39,51,0.16);
+        border-radius: 5px;
+        position: absolute;
+        button {
+            margin: 5px;
+            padding: 5px;
+            font-size: 16px;
+            font-weight: normal;
+            border: 0;
+            background-color: transparent;
+            color: #c1c7cd;
+            cursor: pointer;
+            &:hover {
+                color: #ffffff;
+            }
+        }
     }
 </style>
