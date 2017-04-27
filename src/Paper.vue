@@ -1,11 +1,11 @@
 <template lang="pug">
 div#paper
-    div.toolbox(v-show="showToolbox")
-        button.btn-bold(v-on:click="bold") b
-        button.btn-bold(v-on:click="strike") s
-        button.btn-bold(v-on:click="underline") u
-        button.btn-bold(v-on:click="italic") i
     div#editor-content
+        div#toolbox(v-show="showToolbox")
+            button.btn-bold(v-on:click="bold") b
+            button.btn-bold(v-on:click="strike") s
+            button.btn-bold(v-on:click="underline") u
+            button.btn-bold(v-on:click="italic") i
         div#editor-main(contenteditable="true"
             v-on:mouseup="caret_update"
             v-on:keyup="caret_update"
@@ -19,7 +19,7 @@ export default {
   name: 'editor',
   data () {
     return {
-      showToolbox: true,
+      showToolbox: false,
       isConnected: false,
       socketMessage: '',
       user_color: this.get_color()
@@ -61,7 +61,19 @@ export default {
       });
     },
     show_toolbar () {
+      let sel = window.getSelection();
+      if (sel.isCollapsed) {
+        return;
+      }
+
       this.showToolbox = true;
+
+      let position = this.caret_position();
+
+      let toolbox = document.getElementById('toolbox').style;
+      toolbox.top = position.top - 50 + 'px';
+      toolbox.left = position.left - 30 + 'px';
+
       document.addEventListener('mouseup', this.hide_toolbox, {
         once: true
       });
@@ -92,18 +104,7 @@ export default {
       document.execCommand('formatBlock', false, 'p');
     },
     caret_update () {
-      let sel = window.getSelection();
-      let range = sel.getRangeAt(0);
-
-      // 座標を計測するためのダミー用のspanを入れる
-      let anchor = document.createElement('span');
-      range.insertNode(anchor);
-      let position = this.caret_position(anchor);
-
-      this.set_guide(position);
-      this.set_information(position);
-
-      anchor.parentElement.removeChild(anchor);
+      let position = this.caret_position();
 
       this.$socket.emit("sync_caret_and_content_to_server", {
         top: position.top,
@@ -112,9 +113,17 @@ export default {
         color: this.user_color
       });
     },
-    caret_position (anchor) {
+    caret_position () {
+      let sel = window.getSelection();
+      let range = sel.getRangeAt(0);
+
+      // 座標を計測するためのダミー用のspanを入れる
+      let anchor = document.createElement('span');
+      range.insertNode(anchor);
+
       let parent_position = document.getElementById('editor-main').getBoundingClientRect();
       let caret_position = anchor.getBoundingClientRect();
+      anchor.parentElement.removeChild(anchor);
       return {
         top: caret_position.top - parent_position.top,
         left: caret_position.left - parent_position.left
@@ -217,7 +226,7 @@ export default {
         color: #ffffff;
         padding: 3px;
     }
-    .toolbox {
+    #toolbox {
         background-color: #1b2733;
         box-shadow: 0 0 0 1px #000, 0 8px 16px rgba(27,39,51,0.16);
         border-radius: 5px;
