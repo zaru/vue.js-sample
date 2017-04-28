@@ -10,6 +10,7 @@ div#paper
             button.btn-bold(v-on:click="underline") u
             button.btn-bold(v-on:click="italic") i
         div#editor-main(contenteditable="true"
+            data-placeholder="本文を入力してください"
             v-on:mouseup="caret_update"
             v-on:keyup="caret_update"
             v-on:keyup.enter="convert_paragraph"
@@ -30,7 +31,7 @@ export default {
     }
   },
   mounted() {
-    document.getElementById('editor-main').focus();
+//    document.getElementById('editor-main').focus();
   },
   sockets: {
     connect() {
@@ -208,6 +209,13 @@ export default {
         p {
             font-size: 16px;
             margin: 0px 0px 15px 0px;
+        }
+        &:empty:before {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #aaa;
+            content: attr(data-placeholder);
         }
     }
     #js-cursor-guide {
