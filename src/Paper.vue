@@ -75,7 +75,7 @@ export default {
     file_path_to_client(path) {
       let img = document.createElement('img');
       img.setAttribute('src', path);
-      document.getElementById('editor-main').appendChild(img);
+      this.current_caret_insert_node(img);
     }
   },
   methods: {
@@ -137,13 +137,15 @@ export default {
         color: this.user_color
       });
     },
-    caret_position () {
+    current_caret_insert_node(dom) {
       let sel = window.getSelection();
       let range = sel.getRangeAt(0);
-
+      range.insertNode(dom);
+    },
+    caret_position () {
       // 座標を計測するためのダミー用のspanを入れる
       let anchor = document.createElement('span');
-      range.insertNode(anchor);
+      this.current_caret_insert_node(anchor);
 
       let parent_position = document.getElementById('editor-main').getBoundingClientRect();
       let caret_position = anchor.getBoundingClientRect();
@@ -227,6 +229,7 @@ export default {
         img {
             width: 70%;
             margin: 10px auto;
+            display: block;
         }
         &:empty:before {
             position: absolute;
