@@ -15,6 +15,10 @@ div#paper
                     icon(name="underline")
                 button.btn-bold(v-on:click="italic")
                     icon(name="italic")
+                button.btn-bold(v-on:click="header")
+                    icon(name="header")
+                button.btn-bold(v-on:click="hr")
+                    icon(name="minus")
         div#editor-main(contenteditable="true"
             data-placeholder="本文を入力してください"
             v-on:mouseup="caret_update"
@@ -130,6 +134,12 @@ export default {
     italic () {
       this.set_style('italic');
     },
+    header () {
+      document.execCommand('formatBlock', false, 'h2');
+    },
+    hr () {
+      document.execCommand('insertHorizontalRule', false, null);
+    },
     convert_paragraph() {
       document.execCommand('formatBlock', false, 'p');
     },
@@ -223,14 +233,48 @@ export default {
     #editor-main {
         font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
         cursor: text;
-        background-color: #fafafa;
         padding: 10px;
         line-height: 1.6;
         outline: 0;
         color: #1b2733;
+        h2 {
+            font-size: 24px;
+            margin: 15px 0;
+            padding: 0;
+            letter-spacing: 2px;
+        }
         p {
             font-size: 16px;
             margin: 0px 0px 15px 0px;
+            letter-spacing: 1px;
+        }
+        hr {
+            border: 0;
+            margin: 2em auto;
+            width: 90%;
+            max-width: 100%;
+            background-position: 50%;
+            box-sizing: border-box;
+
+            height: 8px;
+            background-image: radial-gradient(
+                            farthest-side at 50% -50%,
+                            hsla(0, 0%, 20%, 0.1),
+                            hsla(0, 0%, 0%, 0));
+            position: relative;
+            &:before {
+                content: "";
+                height: 1px;
+                position: absolute;
+                top: -1px;
+                left: 0;
+                right: 0;
+                background-image: linear-gradient(
+                                90deg,
+                                hsla(0, 0%, 70%, 0.1),
+                                hsla(0, 0%, 20%, 0.15) 80%,
+                                hsla(0, 0%, 70%, 0.1));
+            }
         }
         img {
             width: 70%;
