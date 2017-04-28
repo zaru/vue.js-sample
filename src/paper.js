@@ -8,7 +8,7 @@ Vue.use(VueSocketIO, SocketInstance);
 
 import Icon from 'vue-awesome/components/Icon.vue'
 import 'vue-awesome/icons'
-Vue.component('icon', Icon)
+Vue.component('icon', Icon);
 
 new Vue({
   el: '#paper',

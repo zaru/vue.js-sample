@@ -6,6 +6,9 @@ div#paper
             | {{ user.id[0].toUpperCase() }}
     div#editor-content
         transition(name="fade")
+            div#embedbox(v-show="showEmbedbox")
+                icon(name="plus-circle" scale="2")
+        transition(name="fade")
             div#toolbox(v-show="showToolbox")
                 button.btn-bold(v-on:click="bold")
                     icon(name="bold")
@@ -30,6 +33,8 @@ div#paper
             v-on:dragover.stop.prevent="dragover"
             v-on:dragleave.stop.prevent="dragleave"
             v-on:drop.stop.prevent="drop"
+
+            v-on:mouseover="overlay_embedbox"
             )
 </template>
 
@@ -39,6 +44,7 @@ export default {
   data () {
     return {
       showToolbox: false,
+      showEmbedbox: false,
       isConnected: false,
       socketMessage: '',
       user_color: this.get_color(),
@@ -216,6 +222,20 @@ export default {
     get_color () {
       let colors = ['#14E1E3', '#C5FB25', '#FFAB00', '#FF065B', '#7C32FF', '#FF4C1E', '#FBE525', '#2797FF', '#28C93F'];
       return colors[Math.floor(Math.random() * colors.length)];
+    },
+    overlay_embedbox (e) {
+      let current_dom = e.srcElement;
+      if (current_dom.tagName == 'P') {
+        let position = current_dom.getBoundingClientRect();
+        let parent_position = document.getElementById('editor-main').getBoundingClientRect();
+
+        let toolbox = document.getElementById('embedbox').style;
+        toolbox.top = position.top - parent_position.top - 3 + 'px';
+        toolbox.left = '-30px';
+        this.showEmbedbox = true;
+      } else {
+        this.showEmbedbox = false;
+      }
     }
   },
   mixins: [
@@ -360,5 +380,16 @@ export default {
     }
     .fade-enter, .fade-leave-to {
         opacity: 0
+    }
+
+    #embedbox {
+        color: #bbbbbb;
+        position: absolute;
+    }
+    .spin-enter-active, .spin-leave-active {
+        /*transition: opacity .5s*/
+    }
+    .spin-enter, .spin-leave-to {
+        /*opacity: 0*/
     }
 </style>
