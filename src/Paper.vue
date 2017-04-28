@@ -70,6 +70,12 @@ export default {
 
     sync_user_to_client (data) {
       this.users.push({ id: data.user_id, color: data.color});
+    },
+
+    file_path_to_client(path) {
+      let img = document.createElement('img');
+      img.setAttribute('src', path);
+      document.getElementById('editor-main').appendChild(img);
     }
   },
   methods: {
@@ -130,8 +136,6 @@ export default {
         content: document.getElementById('editor-main').innerHTML,
         color: this.user_color
       });
-
-      console.log(this.setFinishedLoad());
     },
     caret_position () {
       let sel = window.getSelection();
@@ -219,6 +223,10 @@ export default {
         p {
             font-size: 16px;
             margin: 0px 0px 15px 0px;
+        }
+        img {
+            width: 70%;
+            margin: 10px auto;
         }
         &:empty:before {
             position: absolute;
