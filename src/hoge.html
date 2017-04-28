@@ -1,0 +1,11 @@
+<script>
+
+  let sel = window.getSelection();
+  let range = sel.getRangeAt(0);
+
+  // 座標を計測するためのダミー用のspanを入れる
+  let anchor = document.createElement('span');
+  range.insertNode(anchor);
+  let position = this.caret_position(anchor);
+
+</script>

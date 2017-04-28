@@ -4,6 +4,8 @@ div#paper
     div.other-users
         div.user(v-for="user in users" v-bind:style="{ backgroundColor: user.color }")
             | {{ user.id[0].toUpperCase() }}
+
+
     div#editor-content
         transition(name="fade")
             div#embedbox(v-show="showEmbedbox")
@@ -22,6 +24,12 @@ div#paper
                     icon(name="header")
                 button.btn-bold(v-on:click="hr")
                     icon(name="minus")
+
+        div#editor-title(contenteditable="true"
+            data-placeholder="タイトルを入力してください"
+            v-on:keyup.enter="hoge"
+        )
+
         div#editor-main(contenteditable="true"
             data-placeholder="本文を入力してください"
             v-on:mouseup="caret_update"
@@ -246,17 +254,34 @@ export default {
 
 <style lang="scss">
     #editor-content {
+        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
         position: relative;
         margin: 100px auto;
         width: 745px;
+        color: #1b2733;
     }
-    #editor-main {
-        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+
+    #editor-title {
+        font-size: 24px;
         cursor: text;
         padding: 10px;
         line-height: 1.6;
         outline: 0;
-        color: #1b2733;
+        margin: 0 0 20px 0;
+
+        &:empty:before {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #aaa;
+            content: attr(data-placeholder);
+        }
+    }
+    #editor-main {
+        cursor: text;
+        padding: 10px;
+        line-height: 1.6;
+        outline: 0;
         h2 {
             font-size: 24px;
             margin: 15px 0;
@@ -303,7 +328,7 @@ export default {
         }
         &:empty:before {
             position: absolute;
-            top: 10px;
+            top: 90px;
             left: 10px;
             color: #aaa;
             content: attr(data-placeholder);
