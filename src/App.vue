@@ -14,7 +14,8 @@ export default {
         { url: "ajax.html", title: "Ajax" },
         { url: "todo.html", title: "Todo" },
         { url: "editor.html", title: "Editor" },
-        { url: "paper.html", title: "Paper" }
+        { url: "paper.html", title: "Paper" },
+        { url: "drag_drop.html", title: "Drag & Drop" }
       ]
     }
   }
