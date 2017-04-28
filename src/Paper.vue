@@ -15,6 +15,11 @@ div#paper
             v-on:keyup="caret_update"
             v-on:keyup.enter="convert_paragraph"
             v-on:selectstart="start_selection"
+
+            v-bind:class="status_class"
+            v-on:dragover.stop.prevent="dragover"
+            v-on:dragleave.stop.prevent="dragleave"
+            v-on:drop.stop.prevent="drop"
             )
 </template>
 
@@ -125,6 +130,8 @@ export default {
         content: document.getElementById('editor-main').innerHTML,
         color: this.user_color
       });
+
+      console.log(this.setFinishedLoad());
     },
     caret_position () {
       let sel = window.getSelection();
@@ -188,7 +195,10 @@ export default {
       let colors = ['#14E1E3', '#C5FB25', '#FFAB00', '#FF065B', '#7C32FF', '#FF4C1E', '#FBE525', '#2797FF', '#28C93F'];
       return colors[Math.floor(Math.random() * colors.length)];
     }
-  }
+  },
+  mixins: [
+    require('./libs/DragDrop.vue'),
+  ]
 }
 </script>
 
@@ -216,6 +226,9 @@ export default {
             left: 10px;
             color: #aaa;
             content: attr(data-placeholder);
+        }
+        &.dragover {
+            background-color: #f9f3f6;
         }
     }
     #js-cursor-guide {
