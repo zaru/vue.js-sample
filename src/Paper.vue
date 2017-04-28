@@ -1,14 +1,19 @@
 <template lang="pug">
 div#paper
+
     div.other-users
         div.user(v-for="user in users" v-bind:style="{ backgroundColor: user.color }")
             | {{ user.id[0].toUpperCase() }}
     div#editor-content
         div#toolbox(v-show="showToolbox")
-            button.btn-bold(v-on:click="bold") b
-            button.btn-bold(v-on:click="strike") s
-            button.btn-bold(v-on:click="underline") u
-            button.btn-bold(v-on:click="italic") i
+            button.btn-bold(v-on:click="bold")
+                icon(name="bold")
+            button.btn-bold(v-on:click="strike")
+                icon(name="strikethrough")
+            button.btn-bold(v-on:click="underline")
+                icon(name="underline")
+            button.btn-bold(v-on:click="italic")
+                icon(name="italic")
         div#editor-main(contenteditable="true"
             data-placeholder="本文を入力してください"
             v-on:mouseup="caret_update"
@@ -274,6 +279,7 @@ export default {
         background-color: #1b2733;
         box-shadow: 0 0 0 1px #000, 0 8px 16px rgba(27,39,51,0.16);
         border-radius: 5px;
+        padding: 0 5px;
         position: absolute;
         button {
             margin: 5px;
