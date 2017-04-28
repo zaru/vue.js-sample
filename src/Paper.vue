@@ -5,15 +5,16 @@ div#paper
         div.user(v-for="user in users" v-bind:style="{ backgroundColor: user.color }")
             | {{ user.id[0].toUpperCase() }}
     div#editor-content
-        div#toolbox(v-show="showToolbox")
-            button.btn-bold(v-on:click="bold")
-                icon(name="bold")
-            button.btn-bold(v-on:click="strike")
-                icon(name="strikethrough")
-            button.btn-bold(v-on:click="underline")
-                icon(name="underline")
-            button.btn-bold(v-on:click="italic")
-                icon(name="italic")
+        transition(name="fade")
+            div#toolbox(v-show="showToolbox")
+                button.btn-bold(v-on:click="bold")
+                    icon(name="bold")
+                button.btn-bold(v-on:click="strike")
+                    icon(name="strikethrough")
+                button.btn-bold(v-on:click="underline")
+                    icon(name="underline")
+                button.btn-bold(v-on:click="italic")
+                    icon(name="italic")
         div#editor-main(contenteditable="true"
             data-placeholder="本文を入力してください"
             v-on:mouseup="caret_update"
@@ -309,5 +310,11 @@ export default {
             border-radius: 5px;
             margin: 3px;
         }
+    }
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+    }
+    .fade-enter, .fade-leave-to {
+        opacity: 0
     }
 </style>
