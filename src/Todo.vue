@@ -1,7 +1,7 @@
 <template lang="pug">
 div#todo
   p
-    input(type="text" v-model="task" v-on:keydown.enter="submit" autofocus)
+    input(type="text" v-model="task" v-on:keydown.enter="submit" v-focus="true")
   ul
     li(v-for="item in items" v-bind:class="{ completed: item.completed }")
       input(type="checkbox" v-model="item.completed")
