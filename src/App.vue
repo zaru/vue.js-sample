@@ -15,7 +15,8 @@ export default {
         { url: "todo.html", title: "Todo" },
         { url: "editor.html", title: "Editor" },
         { url: "paper.html", title: "Paper" },
-        { url: "drag_drop.html", title: "Drag & Drop" }
+        { url: "drag_drop.html", title: "Drag & Drop" },
+        { url: "draggable_sample.html", title: "Draggable" }
       ]
     }
   }

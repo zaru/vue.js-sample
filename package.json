@@ -12,7 +12,8 @@
     "socket.io-client": "^1.7.3",
     "vue": "^2.2.1",
     "vue-awesome": "^2.2.8",
-    "vue-socket.io": "^2.1.1-a"
+    "vue-socket.io": "^2.1.1-a",
+    "vuedraggable": "^2.10.0"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -22,7 +23,7 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "node-sass": "^4.5.2",
-    "pug": "^0.1.0",
+    "pug": "^2.0.0-rc.1",
     "sass-loader": "^5.0.1",
     "vue-loader": "^11.3.4",
     "vue-template-compiler": "^2.2.1",
